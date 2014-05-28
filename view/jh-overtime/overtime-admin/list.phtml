@@ -1,0 +1,61 @@
+<a class="btn btn-primary" href="<?php echo $this->url('zfcadmin/overtime/add'); ?>">Add More Overtime</a>
+
+<br />
+<ul class="nav nav-pills">
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            View <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="<?php echo $this->url('zfcadmin/overtime/list', ['to' => null, 'from' => null, 'all' => null], true); ?>">Month</a></li>
+            <li><a href="<?php echo $this->url('zfcadmin/overtime/list', ['to' => null, 'from' => null, 'all' => 1], true); ?>">All</a></li>
+        </ul>
+    </li>
+    <?php $routeMatch = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch(); ?>
+    <?php if(!$routeMatch->getParam('all')): ?>
+        <li><a href="<?php echo $this->monthPagination('zfcadmin/overtime/list')->prevMonth(); ?>">Prev Month</a></li>
+        <li><a href="<?php echo $this->monthPagination('zfcadmin/overtime/list')->nextMonth(); ?>">Next Month</a></li>
+    <?php endif; ?>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            State <span class="caret"></span>
+        </a>
+        <?php echo $this->overtimeStates('zfcadmin/overtime/list')->setUlFormat('<ul class="dropdown-menu">%s</ul>')->render(); ?>
+    </li>
+    <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            User <span class="caret"></span>
+        </a>
+        <?php echo $this->users('zfcadmin/overtime/list')->setUlFormat('<ul class="dropdown-menu">%s</ul>')->render(); ?>
+    </li>
+</ul>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Date</th>
+            <th>Duration (Hours)</th>
+            <th>Notes</th>
+            <th>State</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach($this->overtime as $overtime): ?>
+        <tr>
+            <td><?php echo $overtime->getUser()->getDisplayName(); ?></td>
+            <td><?php echo $overtime->getDate()->format('d-m-Y'); ?></td>
+            <td><?php echo $overtime->getDuration(); ?></td>
+            <td><?php echo $this->escapeHtml($overtime->getNotes()); ?></td>
+            <td><?php echo $this->escapeHtml($overtime->getState()->getState()); ?></td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-default btn-xs" href="<?php echo $this->url('zfcadmin/overtime/edit', ['id' => $overtime->getId()]);?>">Edit</a>
+                    <a class="btn btn-default btn-xs" href="<?php echo $this->url('zfcadmin/overtime/delete', ['id' => $overtime->getId()]);?>">Delete</a>
+                </div>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>

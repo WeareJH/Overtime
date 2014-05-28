@@ -1,0 +1,13 @@
+{
+    "name": "wearejh/overtime",
+    "version": "0.0.1",
+    "ignore": [
+        "**/.*"
+    ],
+    "dependencies": {
+
+    },
+    "devDependencies": {
+
+    }
+}

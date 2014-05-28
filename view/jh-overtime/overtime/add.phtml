@@ -1,0 +1,64 @@
+<?php $title = 'Add more Overtime';
+$this->headTitle($title); ?>
+
+<h1><?php echo $this->escapeHtml(sprintf('%s, Book some overtime!', $this->user->getDisplayName())); ?></h1>
+<br />
+<div class="row">
+    <div class="col-sm-8">
+        <?php $form = $this->form;
+        $form->setAttribute('action', $this->url('overtime/add'));
+        $form->prepare();
+        echo $this->form()->openTag($form); ?>
+
+        <?php echo $this->formHidden($form->get('overtime')->get('id')); ?>
+        <div class="form-group <?php if ($this->formElementErrors($form->get('overtime')->get('date'))) echo 'has-error'; ?>">
+            <?php echo $this->formLabel($form->get('overtime')->get('date')); ?>
+            <div class="col-sm-3">
+                <?php echo $this->formDate($form->get('overtime')->get('date')); ?>
+            </div>
+            <div class="col-sm-6">
+                <?php echo $this->formElementErrors()
+                    ->setMessageOpenFormat('<span class="help-block">')
+                    ->setMessageSeparatorString('</span><span class="help-block">')
+                    ->setMessageCloseString('</span>')
+                    ->render($form->get('overtime')->get('date')); ?>
+            </div>
+        </div>
+
+        <div class="form-group <?php if ($this->formElementErrors($form->get('overtime')->get('duration'))) echo 'has-error'; ?>">
+            <?php echo $this->formLabel($form->get('overtime')->get('duration')); ?>
+            <div class="col-sm-3">
+                <?php echo $this->formText($form->get('overtime')->get('duration')); ?>
+            </div>
+            <div class="col-sm-6">
+                <?php echo $this->formElementErrors()
+                    ->setMessageOpenFormat('<span class="help-block">')
+                    ->setMessageSeparatorString('</span><span class="help-block">')
+                    ->setMessageCloseString('</span>')
+                    ->render($form->get('overtime')->get('duration')); ?>
+            </div>
+        </div>
+
+        <div class="form-group <?php if ($this->formElementErrors($form->get('overtime')->get('notes'))) echo 'has-error'; ?>">
+            <?php echo $this->formLabel($form->get('overtime')->get('notes')); ?>
+            <div class="col-sm-3">
+                <?php echo $this->formTextArea($form->get('overtime')->get('notes')); ?>
+            </div>
+            <div class="col-sm-6">
+                <?php echo $this->formElementErrors()
+                    ->setMessageOpenFormat('<span class="help-block">')
+                    ->setMessageSeparatorString('</span><span class="help-block">')
+                    ->setMessageCloseString('</span>')
+                    ->render($form->get('overtime')->get('notes')); ?>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-3 col-sm-offset-3">
+                <?php echo $this->formSubmit($form->get('submit')); ?>
+            </div>
+        </div>
+
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+</div>

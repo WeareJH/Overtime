@@ -1,0 +1,42 @@
+{
+    "name": "wearejh/overtime",
+    "description": "ZF2 Module to plugin to the Hub module - provides overtime logging and administration features",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aydin Hassan",
+            "email": "aydin@hotmail.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "doctrine/doctrine-module": "dev-master as 0.8.0",
+        "doctrine/doctrine-orm-module": "0.*",
+        "zendframework/zendframework": "2.3.*",
+        "wearejh/jh-user": "dev-master",
+        "wearejh/installer": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*",
+        "squizlabs/php_codesniffer": "1.4.*",
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url" : "https://github.com/WeareJH/JhUser.git"
+
+        },
+        {
+            "type": "vcs",
+            "url" : "https://github.com/WeareJH/Installer.git"
+
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "JhOvertime\\": "src/"
+        }
+    }
+}

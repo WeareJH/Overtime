@@ -86,8 +86,8 @@ class OvertimeController extends AbstractActionController
         }
 
         if (!$this->params()->fromRoute('all', false)) {
-            $from   = $this->validateDate($fromDate, new \DateTime("first day of this month"));
-            $to     = $this->validateDate($toDate, new \DateTime("first day of next month"));
+            $from   = $this->validateDate($fromDate, new \DateTime("first day of this month 00:00:00"));
+            $to     = $this->validateDate($toDate, new \DateTime("first day of next month 00:00:00"));
             $dateRange = [ $from, $to];
         }
 

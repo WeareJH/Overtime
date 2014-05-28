@@ -95,8 +95,8 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
                 $this->user,
                 [],
                 [
-                    new \DateTime("first day of this month"),
-                    new \DateTime("first day of next month")
+                    new \DateTime("first day of this month 00:00:00"),
+                    new \DateTime("first day of next month 00:00:00")
                 ]
             )
             ->will($this->returnValue([]));
@@ -119,8 +119,8 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
                 $this->user,
                 ['state' => 'whut'],
                 [
-                    new \DateTime("first day of this month"),
-                    new \DateTime("first day of next month")
+                    new \DateTime("first day of this month 00:00:00"),
+                    new \DateTime("first day of next month 00:00:00")
                 ]
             )
             ->will($this->returnValue([]));

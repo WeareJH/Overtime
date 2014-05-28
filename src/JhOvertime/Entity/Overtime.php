@@ -175,5 +175,4 @@ class Overtime implements JsonSerializable
             'notes'     => $this->notes,
         );
     }
-
 }

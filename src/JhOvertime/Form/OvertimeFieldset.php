@@ -60,25 +60,6 @@ class OvertimeFieldset extends Fieldset implements InputFilterProviderInterface
             ],
         ]);
 
-        /*$this->add(
-            [
-                'type' => 'DoctrineModule\Form\Element\ObjectSelect',
-                'name' => 'state',
-                'options' => [
-                    'label'          => 'State',
-                    'label_attributes' => [
-                        'class' => 'col-sm-3 control-label',
-                    ],
-                    'object_manager' => $objectManager,
-                    'target_class'   => 'JhOvertime\Entity\OvertimeState',
-                    'property'       => 'state',
-                ],
-                'attributes' => [
-                    'class' => 'form-control input-sm',
-                ],
-            ]
-        );*/
-
         $this->add([
             'name'      => 'notes',
             'type'      => 'text',
@@ -94,6 +75,9 @@ class OvertimeFieldset extends Fieldset implements InputFilterProviderInterface
         ]);
     }
 
+    /**
+     * @return array
+     */
     public function getInputFilterSpecification()
     {
         return [
@@ -148,9 +132,6 @@ class OvertimeFieldset extends Fieldset implements InputFilterProviderInterface
                     ],
                 ],
             ],
-            /*'state' => [
-                'required' => false,
-            ]*/
         ];
     }
-} 
+}

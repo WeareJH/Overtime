@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class UsersFactory
- * @package JhOvertime\Controller\Factory
+ * @package JhOvertime\View\Helper\Factory
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
 class UsersFactory implements FactoryInterface
@@ -23,9 +23,7 @@ class UsersFactory implements FactoryInterface
         $serviceLocator = $serviceLocator->getServiceLocator();
 
         return new Users(
-            $serviceLocator->get('JhUser\Repository\UserRepository'),
-            $serviceLocator->get('Router'),
-            $serviceLocator->get('Request')
+            $serviceLocator->get('JhUser\Repository\UserRepository')
         );
     }
 }

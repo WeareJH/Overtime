@@ -40,14 +40,14 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
         $criteria['user'] = $user;
 
         $params = [];
-        foreach($criteria as $field => $value) {
+        foreach ($criteria as $field => $value) {
             $params[] = ['field' => $field, 'op' => '=', 'value' => $value];
         }
 
         $qb = $this->overtimeRepository->createQueryBuilder('o');
         $qb->select('o');
 
-        if($dateRange) {
+        if ($dateRange) {
             $qb->andWhere('o.date >= :startDate');
             $qb->andWhere('o.date <= :endDate');
 
@@ -57,7 +57,7 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
             ]);
         }
 
-        foreach($params as $param) {
+        foreach ($params as $param) {
             $qb->andWhere(sprintf('o.%s %s :%s', $param['field'], $param['op'], $param['field']));
             $qb->setParameter($param['field'], $param['value']);
         }

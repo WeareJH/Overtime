@@ -17,6 +17,9 @@ class OvertimeAdminController extends OvertimeController
      */
     protected $listRoute = 'zfcadmin/overtime';
 
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function editAction()
     {
         $this->overtimeForm->setValidationGroup([
@@ -30,6 +33,4 @@ class OvertimeAdminController extends OvertimeController
 
         return parent::editAction();
     }
-
-
 }

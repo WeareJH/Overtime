@@ -48,33 +48,22 @@ class OvertimeController extends AbstractActionController
     public function __construct(
         OvertimeService $overtimeService,
         OvertimeRepositoryInterface $overtimeRepository,
-        FormInterface $overtimeForm)
-    {
+        FormInterface $overtimeForm
+    ) {
         $this->overtimeService      = $overtimeService;
         $this->overtimeRepository   = $overtimeRepository;
         $this->overtimeForm         = $overtimeForm;
     }
 
-    public function generateDateRange() {
-
-        $month  = (string) $this->params()->fromQuery('m');
-        $year   = (string) $this->params()->fromQuery('y');
-
-        $validator  = new DateValidator(array('format' => 'M Y'));
-        if ($validator->isValid(sprintf("%s %s", $month, $year))) {
-            return [
-                new \DateTime(sprintf('first day of %s %s 00:00:00', $month, $year)),
-                new \DateTime(sprintf('last day of %s %s 23:59:59', $month, $year)),
-            ];
-        } else {
-            return null;
-        }
-    }
-
+    /**
+     * @param string $date
+     * @param \DateTime $defaultReturn
+     * @return \DateTime
+     */
     public function validateDate($date, \DateTime $defaultReturn)
     {
         $validator  = new DateValidator(array('format' => 'd-m-Y'));
-        if($validator->isValid($date) ) {
+        if ($validator->isValid($date)) {
             return \DateTime::createFromFormat('d-m-Y', $date);
         }
 
@@ -93,19 +82,15 @@ class OvertimeController extends AbstractActionController
         $dateRange  = null;
         $criteria   = [];
 
-        if($state) {
+        if ($state) {
             $criteria['state'] = $state;
         }
 
-        if($userId) {
+        if ($userId) {
             $criteria['user'] = $userId;
         }
 
-        if(!$toDate) {
-            //no-date filtering, page and show all
-        }
-
-        if(!$this->params()->fromRoute('all', false)) {
+        if (!$this->params()->fromRoute('all', false)) {
             $from   = $this->validateDate($fromDate, new \DateTime("first day of this month"));
             $to     = $this->validateDate($toDate, new \DateTime("first day of next month"));
             $dateRange = [ $from, $to];
@@ -120,6 +105,9 @@ class OvertimeController extends AbstractActionController
 
     }
 
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function addAction()
     {
         $request    = $this->getRequest();
@@ -148,18 +136,24 @@ class OvertimeController extends AbstractActionController
         ]);
     }
 
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function editAction()
     {
         $request    = $this->getRequest();
         $id         = $this->params()->fromRoute('id');
         $user       = $this->zfcUserAuthentication()->getIdentity();
 
-        if(!$id) {
+        if (!$id) {
             return $this->redirect()->toRoute($this->listRoute);
         }
 
         try {
-            $overtime = $this->overtimeRepository->findOneByUserAndId($this->zfcUserAuthentication()->getIdentity(), $id);
+            $overtime = $this->overtimeRepository->findOneByUserAndId(
+                $this->zfcUserAuthentication()->getIdentity(),
+                $id
+            );
         } catch (\Exception $e) {
             //add error message
             return $this->redirect()->toRoute($this->listRoute);
@@ -176,10 +170,7 @@ class OvertimeController extends AbstractActionController
                 } catch (\Exception $e) {
                     //add messages
                 }
-            } else {
-                var_dump($this->overtimeForm->getMessages());
             }
-
         }
 
         return new ViewModel([
@@ -189,16 +180,22 @@ class OvertimeController extends AbstractActionController
         ]);
     }
 
+    /**
+     * @return \Zend\Http\Response
+     */
     public function deleteAction()
     {
         $id = $this->params()->fromRoute('id');
 
-        if(!$id) {
+        if (!$id) {
             return $this->redirect()->toRoute($this->listRoute);
         }
 
         try {
-            $overtime = $this->overtimeRepository->findOneByUserAndId($this->zfcUserAuthentication()->getIdentity(), $id);
+            $overtime = $this->overtimeRepository->findOneByUserAndId(
+                $this->zfcUserAuthentication()->getIdentity(),
+                $id
+            );
         } catch (\Exception $e) {
             //add error message
             return $this->redirect()->toRoute($this->listRoute);

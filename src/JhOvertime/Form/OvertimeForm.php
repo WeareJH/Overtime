@@ -8,11 +8,20 @@ use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\FieldsetInterface;
 
+/**
+ * Class OvertimeForm
+ * @package JhOvertime\Form
+ * @author Aydin Hassan <aydin@hotmail.co.uk>
+ */
 class OvertimeForm extends Form
 {
 
-    public function __construct(ObjectManager $objectManager, FieldsetInterface $overtimeFieldset, $name = null, $options = [])
-    {
+    public function __construct(
+        ObjectManager $objectManager,
+        FieldsetInterface $overtimeFieldset,
+        $name = null,
+        $options = []
+    ) {
         parent::__construct($name, $options);
 
         $this->setHydrator(new DoctrineHydrator($objectManager, 'JhOvertime\Entity\Overtime'))

@@ -5,32 +5,59 @@ namespace JhOvertime\View\Helper;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Zend\View\Helper\AbstractHelper;
 
+/**
+ * Class Users
+ * @package JhOvertime\View\Helper
+ * @author Aydin Hassan <aydin@hotmail.co.uk>
+ */
 class Users extends AbstractHelper
 {
 
+    /**
+     * @var string
+     */
     protected $ulFormat = '<ul>%s</ul>';
+
+    /**
+     * @var string
+     */
     protected $liFormat = '<li><a href="%s">%s</a></li>';
+
+    /**
+     * @var \Doctrine\Common\Persistence\ObjectRepository
+     */
     protected $userRepository;
+
+    /**
+     * @var string
+     */
     protected $route;
 
     /**
      * @param ObjectRepository $userRepository
-     * @param $router
-     * @param $request
      */
-    public function __construct(ObjectRepository $userRepository, $router, $request)
+    public function __construct(ObjectRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->router= $router;
-        $this->request = $request;
     }
 
+    /**
+     * @param string $route
+     * @return self
+     */
+    public function __invoke($route)
+    {
+        $this->route = $route;
+        return $this;
+    }
 
-
+    /**
+     * @return string
+     */
     public function render()
     {
         $html = sprintf($this->liFormat, $this->view->url($this->route, ['user' => 'all'], true), 'All');
-        foreach($this->userRepository->findAll() as $user) {
+        foreach ($this->userRepository->findAll() as $user) {
             $url = $this->view->url($this->route, ['user' => $user->getId()], true);
             $html .= sprintf($this->liFormat, $url, $user->getDisplayName());
         }
@@ -38,21 +65,13 @@ class Users extends AbstractHelper
         return sprintf($this->ulFormat, $html);
     }
 
-    public function __invoke($route)
+    /**
+     * @param string $ulFormat
+     * @return self
+     */
+    public function setUlFormat($ulFormat)
     {
-        $this->route = $route;
+        $this->ulFormat = $ulFormat;
         return $this;
     }
-
-    public function setUlFormat($string)
-    {
-        $this->ulFormat = $string;
-        return $this;
-    }
-
-    public function setBaseRoute($route)
-    {
-        $this->route = $route;
-        return $this;
-    }
-} 
+}

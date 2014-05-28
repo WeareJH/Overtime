@@ -2,9 +2,7 @@
 
 namespace JhOvertimeTest;
 
-use JhFlexiTime\Module;
-use JhUser\Entity\User;
-use Zend\ServiceManager\ServiceManager;
+use JhOvertime\Module;
 
 /**
  * Class ModuleTest
@@ -13,6 +11,17 @@ use Zend\ServiceManager\ServiceManager;
  */
 class ModuleTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGetConfig()
+    {
+        $module = new Module();
 
+        $this->assertInternalType('array', $module->getConfig());
+        $this->assertSame($module->getConfig(), unserialize(serialize($module->getConfig())), 'Config is serializable');
+    }
 
+    public function testGetAutoloaderConfig()
+    {
+        $module = new Module;
+        $this->assertInternalType('array', $module->getAutoloaderConfig());
+    }
 }

@@ -75,19 +75,14 @@ class OvertimeController extends AbstractActionController
      */
     public function listAction()
     {
+        $criteria   = [];
         $state      = $this->params()->fromRoute('state', false);
-        $userId     = $this->params()->fromRoute('user', false);
         $toDate     = $this->params()->fromRoute('to');
         $fromDate   = $this->params()->fromRoute('from');
         $dateRange  = null;
-        $criteria   = [];
 
         if ($state) {
             $criteria['state'] = $state;
-        }
-
-        if ($userId) {
-            $criteria['user'] = $userId;
         }
 
         if (!$this->params()->fromRoute('all', false)) {
@@ -102,7 +97,6 @@ class OvertimeController extends AbstractActionController
             'user'      => $user,
             'overtime'  => $this->overtimeRepository->findByUserAndCriteriaAndDateRange($user, $criteria, $dateRange),
         ]);
-
     }
 
     /**

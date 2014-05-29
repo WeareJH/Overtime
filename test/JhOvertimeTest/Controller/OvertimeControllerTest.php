@@ -90,10 +90,9 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
     {
         $this->overtimeRepository
             ->expects($this->once())
-            ->method('findByUserAndCriteriaAndDateRange')
+            ->method('findByCriteriaAndDateRange')
             ->with(
-                $this->user,
-                [],
+                ['user' => $this->user],
                 [
                     new \DateTime("first day of this month 00:00:00"),
                     new \DateTime("first day of next month 00:00:00")
@@ -114,10 +113,9 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
     {
         $this->overtimeRepository
             ->expects($this->once())
-            ->method('findByUserAndCriteriaAndDateRange')
+            ->method('findByCriteriaAndDateRange')
             ->with(
-                $this->user,
-                ['state' => 'whut'],
+                ['state' => 'whut', 'user' => $this->user],
                 [
                     new \DateTime("first day of this month 00:00:00"),
                     new \DateTime("first day of next month 00:00:00")

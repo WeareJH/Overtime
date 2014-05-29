@@ -35,15 +35,13 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
         return $this->overtimeRepository->findBy(array('user' => $user));
     }
 
-    public function findByUserAndCriteriaAndDateRange(UserInterface $user, array $criteria, array $dateRange = null)
+    /**
+     * @param array $criteria
+     * @param array $dateRange
+     * @return \JhOvertime\Entity\Overtime[]
+     */
+    public function findByCriteriaAndDateRange(array $criteria, array $dateRange = null)
     {
-        $criteria['user'] = $user;
-
-        $params = [];
-        foreach ($criteria as $field => $value) {
-            $params[] = ['field' => $field, 'op' => '=', 'value' => $value];
-        }
-
         $qb = $this->overtimeRepository->createQueryBuilder('o');
         $qb->select('o');
 
@@ -57,9 +55,9 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
             ]);
         }
 
-        foreach ($params as $param) {
-            $qb->andWhere(sprintf('o.%s %s :%s', $param['field'], $param['op'], $param['field']));
-            $qb->setParameter($param['field'], $param['value']);
+        foreach ($criteria as $field => $value) {
+            $qb->andWhere(sprintf('o.%s = :%s', $field, $field));
+            $qb->setParameter($field, $value);
         }
 
         $qb->orderBy('o.date', 'ASC');

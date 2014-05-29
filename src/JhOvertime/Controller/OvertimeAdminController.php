@@ -15,7 +15,7 @@ class OvertimeAdminController extends OvertimeController
     /**
      * @var string
      */
-    protected $listRoute = 'zfcadmin/overtime';
+    protected $listRoute = 'zfcadmin/overtime/list';
 
     /**
      * @return \Zend\Http\Response|ViewModel
@@ -51,20 +51,17 @@ class OvertimeAdminController extends OvertimeController
         }
 
         if ($userId) {
-            $user = $userId;
-        } else {
-            $user = $this->zfcUserAuthentication()->getIdentity();
+            $criteria['user'] = $userId;
         }
 
         if (!$this->params()->fromRoute('all', false)) {
-            $from   = $this->validateDate($fromDate, new \DateTime("first day of this month"));
-            $to     = $this->validateDate($toDate, new \DateTime("first day of next month"));
+            $from   = $this->validateDate($fromDate, new \DateTime("first day of this month 00:00:00"));
+            $to     = $this->validateDate($toDate, new \DateTime("first day of next month 00:00:00"));
             $dateRange = [ $from, $to];
         }
 
         return new ViewModel([
-            'user'      => $user,
-            'overtime'  => $this->overtimeRepository->findByUserAndCriteriaAndDateRange($user, $criteria, $dateRange),
+            'overtime'  => $this->overtimeRepository->findByCriteriaAndDateRange($criteria, $dateRange),
         ]);
     }
 }

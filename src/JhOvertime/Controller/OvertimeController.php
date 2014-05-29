@@ -92,10 +92,11 @@ class OvertimeController extends AbstractActionController
         }
 
         $user = $this->zfcUserAuthentication()->getIdentity();
+        $criteria['user'] = $user;
 
         return new ViewModel([
             'user'      => $user,
-            'overtime'  => $this->overtimeRepository->findByUserAndCriteriaAndDateRange($user, $criteria, $dateRange),
+            'overtime'  => $this->overtimeRepository->findByCriteriaAndDateRange($criteria, $dateRange),
         ]);
     }
 

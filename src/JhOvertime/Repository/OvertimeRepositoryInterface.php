@@ -25,10 +25,9 @@ interface OvertimeRepositoryInterface
     public function findOneByUserAndId(UserInterface $user, $id);
 
     /**
-     * @param UserInterface $user
      * @param array $criteria
      * @param array $dateRange
      * @return \JhOvertime\Entity\Overtime[]
      */
-    public function findByUserAndCriteriaAndDateRange(UserInterface $user, array $criteria, array $dateRange = null);
+    public function findByCriteriaAndDateRange(array $criteria, array $dateRange = null);
 }

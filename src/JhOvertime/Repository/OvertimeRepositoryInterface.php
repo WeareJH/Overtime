@@ -13,12 +13,6 @@ interface OvertimeRepositoryInterface
 {
     /**
      * @param UserInterface $user
-     * @return \JhOvertime\Entity\Overtime[]
-     */
-    public function findByUser(UserInterface $user);
-
-    /**
-     * @param UserInterface $user
      * @param int $id
      * @return \JhOvertime\Entity\Overtime|null
      */

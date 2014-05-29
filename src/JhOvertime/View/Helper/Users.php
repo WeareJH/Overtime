@@ -56,7 +56,7 @@ class Users extends AbstractHelper
      */
     public function render()
     {
-        $html = sprintf($this->liFormat, $this->view->url($this->route, ['user' => 'all'], true), 'All');
+        $html = sprintf($this->liFormat, $this->view->url($this->route, ['user' => null], true), 'All');
         foreach ($this->userRepository->findAll() as $user) {
             $url = $this->view->url($this->route, ['user' => $user->getId()], true);
             $html .= sprintf($this->liFormat, $url, $user->getDisplayName());

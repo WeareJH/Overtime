@@ -35,6 +35,9 @@ return [
             'JhOvertime\Service\OvertimeService'        => 'JhOvertime\Service\Factory\OvertimeServiceFactory',
 
         ],
+        'aliases' => [
+            'JhOvertime\ObjectManager' => 'Doctrine\ORM\EntityManager',
+        ],
     ],
 
     //forms & fieldsets

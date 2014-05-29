@@ -2,15 +2,16 @@
 
 namespace JhOvertimeTest\View\Helper;
 
-use JhOvertime\View\Helper\Users;
-use ZfcUser\Entity\User;
+use JhOvertime\View\Helper\OvertimeStates;
+use JhOvertime\Entity\OvertimeState;
+use ReflectionClass;
 
 /**
- * Class UsersTest
+ * Class OvertimeStatesTest
  * @package JhOvertimeTest\View\Helper
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class UsersTest extends \PHPUnit_Framework_TestCase
+class OvertimeStatesTest extends \PHPUnit_Framework_TestCase
 {
     protected $helper;
     protected $repository;
@@ -20,7 +21,7 @@ class UsersTest extends \PHPUnit_Framework_TestCase
     {
         $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
-        $this->helper = new Users($this->repository);
+        $this->helper = new OvertimeStates($this->repository);
         $this->renderer = $this->getMock('Zend\View\Renderer\PhpRenderer', ['url']);
         $this->helper->setView($this->renderer);
     }
@@ -33,39 +34,41 @@ class UsersTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderFunction()
     {
-        $user1 = new User();
-        $user1->setId(1)->setDisplayName('Aydin');
-        $user2 = new User();
-        $user2->setId(2)->setDisplayName('Jack');
+        $state1 = new OvertimeState();
+        $this->setId($state1, 1);
+        $state1->setState('Paid');
+        $state2 = new OvertimeState();
+        $this->setId($state2, 2);
+        $state2->setState('Unpaid');
 
         $route = 'test';
 
         $this->repository
             ->expects($this->once())
             ->method('findAll')
-            ->will($this->returnValue([$user1, $user2]));
+            ->will($this->returnValue([$state1, $state2]));
 
         $this->renderer
             ->expects($this->at(0))
             ->method('url')
-            ->with($route, ['user' => null], true)
+            ->with($route, ['state' => null], true)
             ->will($this->returnValue('http://test/'));
 
         $this->renderer
             ->expects($this->at(1))
             ->method('url')
-            ->with($route, ['user' => $user1->getId()], true)
+            ->with($route, ['state' => $state1->getId()], true)
             ->will($this->returnValue('http://test/'));
 
         $this->renderer
             ->expects($this->at(2))
             ->method('url')
-            ->with($route, ['user' => $user2->getId()], true)
+            ->with($route, ['state' => $state2->getId()], true)
             ->will($this->returnValue('http://test/'));
 
         $output = $this->helper->__invoke($route)->render();
         $expected = '<ul><li><a href="http://test/">All</a></li><li>' .
-            '<a href="http://test/">Aydin</a></li><li><a href="http://test/">Jack</a></li></ul>';
+            '<a href="http://test/">Paid</a></li><li><a href="http://test/">Unpaid</a></li></ul>';
         $this->assertEquals($expected, $output);
     }
 
@@ -78,5 +81,17 @@ class UsersTest extends \PHPUnit_Framework_TestCase
         $property = $reflector->getProperty('ulFormat');
         $property->setAccessible(true);
         $this->assertEquals($newUlFormat, $property->getValue($this->helper));
+    }
+
+    /**
+     * @param OvertimeState $state
+     * @param int $id
+     */
+    public function setId(OvertimeState $state, $id)
+    {
+        $reflector = new ReflectionClass($state);
+        $property = $reflector->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($state, $id);
     }
 }

@@ -73,8 +73,9 @@ class MonthPagination extends AbstractHelper
             $toDate = clone $fromDate;
             $toDate->modify("+1 month");
         } else {
-            $toDate = new \DateTime("first day of next month");
-            $fromDate   = new \DateTime("first day of this month");
+            $fromDate   = new \DateTime("first day of next month");
+            $toDate     = clone $fromDate;
+            $toDate->modify("+1 month");
         }
 
         return $this->view->url(

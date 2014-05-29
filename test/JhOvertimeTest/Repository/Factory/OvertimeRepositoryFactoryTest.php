@@ -1,15 +1,15 @@
 <?php
 
-namespace JhOvertimeTest\Service\Factory;
+namespace JhOvertimeTest\Repository\Factory;
 
-use JhOvertime\Service\Factory\OvertimeServiceFactory;
+use JhOvertime\Repository\Factory\OvertimeRepositoryFactory;
 
 /**
- * Class OvertimeServiceFactoryTest
- * @package JhFlexiTimeTest\Service\Factory
+ * Class OvertimeRepositoryFactoryTest
+ * @package JhFlexiTimeTest\Repository\Factory
  * @author Aydin Hassan <aydin@hotmail.co.uk>
  */
-class OvertimeServiceFactoryTest extends \PHPUnit_Framework_TestCase
+class OvertimeRepositoryFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testFactoryProcessesWithoutErrors()
     {
@@ -18,17 +18,17 @@ class OvertimeServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $objectManager
             ->expects($this->once())
             ->method('getRepository')
-            ->with('JhOvertime\Entity\OvertimeState')
+            ->with('JhOvertime\Entity\Overtime')
             ->will($this->returnValue($repository));
 
         $serviceLocator   = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
         $serviceLocator
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('get')
-            ->with('JhHub\ObjectManager')
+            ->with('JhOvertime\ObjectManager')
             ->will($this->returnValue($objectManager));
 
-        $factory = new OvertimeServiceFactory();
-        $this->assertInstanceOf('JhOvertime\Service\OvertimeService', $factory->createService($serviceLocator));
+        $factory = new OvertimeRepositoryFactory();
+        $this->assertInstanceOf('JhOvertime\Repository\OvertimeRepository', $factory->createService($serviceLocator));
     }
 }

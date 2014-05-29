@@ -20,7 +20,7 @@ class OvertimeRepositoryFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         return new OvertimeRepository(
-            $serviceLocator->get('JhHub\ObjectManager')->getRepository('JhOvertime\Entity\Overtime')
+            $serviceLocator->get('JhOvertime\ObjectManager')->getRepository('JhOvertime\Entity\Overtime')
         );
     }
 }

@@ -36,6 +36,8 @@ class OvertimeService
     }
 
     /**
+     * TODO: Just inject the default state
+     *
      * @param Overtime $overtime
      */
     public function save(Overtime $overtime)

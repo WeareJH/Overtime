@@ -27,15 +27,6 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
     }
 
     /**
-     * @param UserInterface $user
-     * @return object
-     */
-    public function findByUser(UserInterface $user)
-    {
-        return $this->overtimeRepository->findBy(array('user' => $user));
-    }
-
-    /**
      * @param array $criteria
      * @param array $dateRange
      * @return \JhOvertime\Entity\Overtime[]
@@ -50,8 +41,8 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
             $qb->andWhere('o.date <= :endDate');
 
             $qb->setParameters([
-                'startDate' => $dateRange[0],
-                'endDate' => $dateRange[1],
+                'startDate' => $dateRange[0]->format('Y-m-d'),
+                'endDate' => $dateRange[1]->format('Y-m-d'),
             ]);
         }
 

@@ -44,7 +44,7 @@ class Overtime implements JsonSerializable
      *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    protected $duration;
+    protected $duration = 0;
 
     /**
      * @var string

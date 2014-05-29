@@ -21,7 +21,12 @@ class DateToStringStrategy implements StrategyInterface
     {
         if (!is_null($value)) {
             if (!($value instanceof DateTime)) {
-                throw new \InvalidArgumentException(sprintf('Field "%s" is not a valid DateTime object', (is_object($value)) ? get_class($value) : $value));
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Field "%s" is not a valid DateTime object',
+                        (is_object($value)) ? get_class($value) : $value
+                    )
+                );
             }
 
             //this is the format that Chrome wants the date in for

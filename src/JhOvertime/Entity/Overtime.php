@@ -168,11 +168,11 @@ class Overtime implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        return array(
+        return [
             'id'        => $this->id,
             'date'      => $this->date->format('d-m-Y'),
             'duration'  => $this->duration,
             'notes'     => $this->notes,
-        );
+        ];
     }
 }

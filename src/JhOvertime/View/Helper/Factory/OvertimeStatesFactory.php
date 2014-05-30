@@ -23,7 +23,7 @@ class OvertimeStatesFactory implements FactoryInterface
         $serviceLocator = $serviceLocator->getServiceLocator();
 
         return new OvertimeStates(
-            $serviceLocator->get('JhHub\ObjectManager')->getRepository('JhOvertime\Entity\OvertimeState')
+            $serviceLocator->get('JhOvertime\ObjectManager')->getRepository('JhOvertime\Entity\OvertimeState')
         );
     }
 }

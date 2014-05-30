@@ -22,7 +22,7 @@ class OvertimeFormFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $parentLocator      = $serviceLocator->getServiceLocator();
-        $objectManager      = $parentLocator->get('JhHub\ObjectManager');
+        $objectManager      = $parentLocator->get('JhOvertime\ObjectManager');
         $overtimeFieldset   = new OvertimeFieldset($objectManager);
         return new OvertimeForm($objectManager, $overtimeFieldset);
     }

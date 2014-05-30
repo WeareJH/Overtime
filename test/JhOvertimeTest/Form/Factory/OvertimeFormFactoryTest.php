@@ -15,7 +15,7 @@ class OvertimeFormFactoryTest extends \PHPUnit_Framework_TestCase
     public function testFactoryProcessesWithoutErrors()
     {
         $services = [
-            'JhHub\ObjectManager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
+            'JhOvertime\ObjectManager' => $this->getMock('Doctrine\Common\Persistence\ObjectManager'),
         ];
 
         $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');

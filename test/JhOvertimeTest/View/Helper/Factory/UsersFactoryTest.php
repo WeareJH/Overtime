@@ -1,6 +1,6 @@
 <?php
 
-namespace JhFlexiTimeTest\Service\Factory;
+namespace JhFlexiTimeTest\View\Helper\Factory;
 
 use JhOvertime\View\Helper\Factory\UsersFactory;
 use Zend\View\HelperPluginManager;

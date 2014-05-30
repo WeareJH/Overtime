@@ -25,7 +25,7 @@ class OvertimeServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $serviceLocator
             ->expects($this->exactly(2))
             ->method('get')
-            ->with('JhHub\ObjectManager')
+            ->with('JhOvertime\ObjectManager')
             ->will($this->returnValue($objectManager));
 
         $factory = new OvertimeServiceFactory();

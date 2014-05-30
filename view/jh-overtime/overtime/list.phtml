@@ -1,6 +1,6 @@
 <a class="btn btn-primary" href="<?php echo $this->url('overtime/add'); ?>">Add More Overtime</a>
 
-<br />
+
 <ul class="nav nav-pills">
     <li><a href="<?php echo $this->monthPagination('overtime/list')->prevMonth(); ?>">Prev Month</a></li>
     <li><a href="<?php echo $this->monthPagination('overtime/list')->nextMonth(); ?>">Next Month</a></li>
@@ -12,30 +12,35 @@
     </li>
 </ul>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Duration (Hours)</th>
-            <th>Notes</th>
-            <th>State</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach($this->overtime as $overtime): ?>
-        <tr>
-            <td><?php echo $overtime->getDate()->format('d-m-Y'); ?></td>
-            <td><?php echo $overtime->getDuration(); ?></td>
-            <td><?php echo $this->escapeHtml($overtime->getNotes()); ?></td>
-            <td><?php echo $this->escapeHtml($overtime->getState()->getState()); ?></td>
-            <td>
-                <div class="btn-group">
-                    <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/edit', ['id' => $overtime->getId()]);?>">Edit</a>
-                    <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/delete', ['id' => $overtime->getId()]);?>">Delete</a>
-                </div>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<?php if (count($this->overtime)): ?>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Duration (Hours)</th>
+                <th>Notes</th>
+                <th>State</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->overtime as $overtime): ?>
+                <tr>
+                    <td><?php echo $overtime->getDate()->format('d-m-Y'); ?></td>
+                    <td><?php echo $overtime->getDuration(); ?></td>
+                    <td><?php echo $this->escapeHtml($overtime->getNotes()); ?></td>
+                    <td><span class="label"><?php echo $this->escapeHtml($overtime->getState()->getState()); ?></span></td>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/edit', ['id' => $overtime->getId()]);?>">Edit</a>
+                            <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/delete', ['id' => $overtime->getId()]);?>">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <div class="alert alert-info">No Overtime booked for this period</div>
+<?php endif; ?>
+

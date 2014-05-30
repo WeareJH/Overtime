@@ -198,4 +198,25 @@ return [
             ],
         ],
     ],
+
+    //route guards (ACL)
+    'bjyauthorize' => [
+        'guards' => [
+            'BjyAuthorize\Guard\Route' => [
+                //overtime
+                ['route' => 'overtime',                 'roles' => ['user']],
+                ['route' => 'overtime/list',            'roles' => ['user']],
+                ['route' => 'overtime/edit',            'roles' => ['user']],
+                ['route' => 'overtime/add',             'roles' => ['user']],
+                ['route' => 'overtime/delete',          'roles' => ['user']],
+
+                //overtime admin
+                ['route' => 'zfcadmin/overtime',        'roles' => ['user']],
+                ['route' => 'zfcadmin/overtime/list',   'roles' => ['user']],
+                ['route' => 'zfcadmin/overtime/edit',   'roles' => ['user']],
+                ['route' => 'zfcadmin/overtime/add',    'roles' => ['user']],
+                ['route' => 'zfcadmin/overtime/delete', 'roles' => ['user']],
+            ],
+        ],
+    ],
 ];

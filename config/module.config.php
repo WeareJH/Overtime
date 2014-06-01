@@ -65,7 +65,10 @@ return [
                     'list' => [
                         'type'      => 'segment',
                         'options'   => [
-                            'route' => '/list[/state/:state][/from/:from][/to/:to]',
+                            'route' => '/list[/state/:state][/from/:from][/to/:to][/all/:all]',
+                            'constraints' => [
+                                'page' => '[0-9]+',
+                            ],
                         ],
                     ],
                     'add' => [
@@ -166,9 +169,11 @@ return [
     //view helpers
     'view_helpers' => [
         'factories' => [
-            'overtimeStates'    => 'JhOvertime\View\Helper\Factory\OvertimeStatesFactory',
-            'users'             => 'JhOvertime\View\Helper\Factory\UsersFactory',
-            'monthPagination'   => 'JhOvertime\View\Helper\Factory\MonthPaginationFactory',
+            'overtimeStates'        => 'JhOvertime\View\Helper\Factory\OvertimeStatesFactory',
+            'users'                 => 'JhOvertime\View\Helper\Factory\UsersFactory',
+            'monthPagination'       => 'JhOvertime\View\Helper\Factory\MonthPaginationFactory',
+            'paramEnabled'          => 'JhOvertime\View\Helper\Factory\ParamEnabledFactory',
+            'currentFilterParams'   => 'JhOvertime\View\Helper\Factory\CurrentFilterParamsFactory',
         ],
     ],
 
@@ -177,7 +182,7 @@ return [
             [
                 'name'      => 'Overtime',
                 'label'     => 'Overtime',
-                'route'     => 'overtime',
+                'route'     => 'overtime/list',
                 'resource'  => 'user-nav',
                 'privilege' => 'view',
             ],
@@ -186,7 +191,7 @@ return [
         'admin' => [
             'overtime' => [
                 'label' => 'Overtime',
-                'route' => 'zfcadmin/overtime',
+                'route' => 'zfcadmin/overtime/list',
             ],
         ],
     ],

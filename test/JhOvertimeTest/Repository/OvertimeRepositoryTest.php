@@ -34,7 +34,7 @@ class OvertimeRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->fixtureExecutor->execute(array($overtimeFixture));
 
         $result = $this->repository->findByCriteriaAndDateRange([], null);
-        $this->assertCount(2, $result);
+        $this->assertEquals(2, $result->getTotalItemCount());
     }
 
     public function testFindByCriteriaAndDateRangeReturnsAllRecordsOfParticularState()
@@ -45,7 +45,7 @@ class OvertimeRepositoryTest extends \PHPUnit_Framework_TestCase
         $stateId = $overtimeFixture->getOvertime()[0]->getState()->getId();
 
         $result = $this->repository->findByCriteriaAndDateRange(['state' => $stateId], null);
-        $this->assertCount(2, $result);
+        $this->assertEquals(2, $result->getTotalItemCount());
     }
 
     public function testFindByCriteriaAndDateRangeReturnsOnlyRecordsInDateRange()

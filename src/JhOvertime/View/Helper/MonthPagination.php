@@ -47,12 +47,13 @@ class MonthPagination extends AbstractHelper
     public function prevMonth()
     {
         if ($this->routeMatch->getParam('to')) {
-            $toDate = \DateTime::createFromFormat('d-m-Y', $this->routeMatch->getParam('from'));
+            $toDate = \DateTime::createFromFormat('d-m-Y', $this->routeMatch->getParam('to'));
+            $toDate->modify("last day of previous month");
             $fromDate = clone $toDate;
-            $fromDate->modify("-1 month");
+            $fromDate->modify("first day of this month");
 
         } else {
-            $toDate     = new \DateTime("first day of this month");
+            $toDate     = new \DateTime("last day of previous month");
             $fromDate   = new \DateTime("first day of previous month");
         }
 
@@ -70,12 +71,12 @@ class MonthPagination extends AbstractHelper
     {
         if ($this->routeMatch->getParam('to')) {
             $fromDate = \DateTime::createFromFormat('d-m-Y', $this->routeMatch->getParam('to'));
+            $fromDate->modify("first day of next month");
             $toDate = clone $fromDate;
-            $toDate->modify("+1 month");
+            $toDate->modify("last day of this month");
         } else {
             $fromDate   = new \DateTime("first day of next month");
-            $toDate     = clone $fromDate;
-            $toDate->modify("+1 month");
+            $toDate     = new \DateTime("last day of next month");
         }
 
         return $this->view->url(

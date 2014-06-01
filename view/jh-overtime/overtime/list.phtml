@@ -1,46 +1,98 @@
-<a class="btn btn-primary" href="<?php echo $this->url('overtime/add'); ?>">Add More Overtime</a>
+<?php $this->headLink()->appendStylesheet('/css/overtime.css'); ?>
 
+<div class="row">
+    <div class="col-sm-12">
+        <div class="text-center">
+            <h1>OVERTIME</h1>
+            <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/add'); ?>">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+        </div>
+    </div>
+</div>
 
-<ul class="nav nav-pills">
-    <li><a href="<?php echo $this->monthPagination('overtime/list')->prevMonth(); ?>">Prev Month</a></li>
-    <li><a href="<?php echo $this->monthPagination('overtime/list')->nextMonth(); ?>">Next Month</a></li>
-    <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-            State <span class="caret"></span>
-        </a>
-        <?php echo $this->overtimeStates('overtime/list')->setUlFormat('<ul class="dropdown-menu">%s</ul>')->render(); ?>
-    </li>
-</ul>
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6">
 
-<?php if (count($this->overtime)): ?>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Duration (Hours)</th>
-                <th>Notes</th>
-                <th>State</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($this->overtime as $overtime): ?>
+        <div class="text-center">
+            <div id="filter-nav">
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            View <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="<?php echo $this->url('overtime/list', ['to' => null, 'from' => null, 'all' => null], true); ?>">Month</a></li>
+                            <li><a href="<?php echo $this->url('overtime/list', ['to' => null, 'from' => null, 'all' => 1], true); ?>">All</a></li>
+                        </ul>
+                    </div>
+
+                    <?php if(!$this->paramEnabled('all')): ?>
+                        <a class="btn btn-default" href="<?php echo $this->monthPagination('overtime/list')->prevMonth(); ?>">Prev Month</a>
+                        <a class="btn btn-default" href="<?php echo $this->monthPagination('overtime/list')->nextMonth(); ?>">Next Month</a>
+                    <?php endif; ?>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            State <span class="caret"></span>
+                        </button>
+                        <?php echo $this->overtimeStates('overtime/list')->setUlFormat('<ul class="dropdown-menu">%s</ul>')->render(); ?>
+                    </div>
+                </div>
+
+                <div id="filter-params">
+                    <?php echo $this->currentFilterParams('overtime/list'); ?>
+                </div>
+            </div>
+        </div>
+
+        <?php if (count($this->overtime)): ?>
+            <table class="table">
+                <thead>
                 <tr>
-                    <td><?php echo $overtime->getDate()->format('d-m-Y'); ?></td>
-                    <td><?php echo $overtime->getDuration(); ?></td>
-                    <td><?php echo $this->escapeHtml($overtime->getNotes()); ?></td>
-                    <td><span class="label"><?php echo $this->escapeHtml($overtime->getState()->getState()); ?></span></td>
-                    <td>
-                        <div class="btn-group">
-                            <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/edit', ['id' => $overtime->getId()]);?>">Edit</a>
-                            <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/delete', ['id' => $overtime->getId()]);?>">Delete</a>
-                        </div>
-                    </td>
+                    <th>Date</th>
+                    <th>Duration (Hours)</th>
+                    <th>Notes</th>
+                    <th>State</th>
+                    <th></th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <div class="alert alert-info">No Overtime booked for this period</div>
-<?php endif; ?>
+                </thead>
+                <tbody>
+                <?php foreach($this->overtime as $overtime): ?>
+                    <tr>
+                        <td><?php echo $overtime->getDate()->format('d-m-Y'); ?></td>
+                        <td><?php echo $overtime->getDuration(); ?></td>
+                        <td><?php echo $this->escapeHtml($overtime->getNotes()); ?></td>
+                        <td><span class="label label-<?php echo $this->escapeHtml($overtime->getState()->getState()); ?>"><?php echo $this->escapeHtml($overtime->getState()->getState()); ?></span></td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/edit', ['id' => $overtime->getId()]);?>"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="btn btn-default btn-xs" href="<?php echo $this->url('overtime/delete', ['id' => $overtime->getId()]);?>"><span class="glyphicon glyphicon-trash"></span></a>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
 
+            <?php
+                // add at the end of the file after the table
+                echo $this->paginationControl(
+                // the paginator object
+                    $this->overtime,
+                    // the scrolling style
+                    'sliding',
+                    // the partial to use to render the control
+                    ['partial/paginator.phtml', 'JhHub'],
+                    // the route to link to when a user clicks a control link
+                    [
+                        'route' => 'overtime/list',
+                    ]
+                );
+            ?>
+        <?php else: ?>
+            <div class="alert alert-info">No Overtime Found!</div>
+        <?php endif; ?>
+
+    </div>
+</div>

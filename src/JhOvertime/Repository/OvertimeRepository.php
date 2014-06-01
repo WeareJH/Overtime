@@ -4,6 +4,10 @@ namespace JhOvertime\Repository;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use ZfcUser\Entity\UserInterface;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Zend\Paginator\Paginator;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class OvertimeRepository
@@ -51,8 +55,8 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
             $qb->setParameter($field, $value);
         }
 
-        $qb->orderBy('o.date', 'ASC');
-        return $qb->getQuery()->getResult();
+        $qb->orderBy('o.date', 'DESC');
+        return $this->paginate($qb);
     }
 
 
@@ -125,5 +129,18 @@ class OvertimeRepository implements OvertimeRepositoryInterface, ObjectRepositor
     public function getClassName()
     {
         return $this->overtimeRepository->getClassName();
+    }
+
+    /**
+     * Return a paginator object using the query builder object
+     *
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
+     * @return \Zend\Paginator\Paginator
+     */
+    public function paginate(QueryBuilder $queryBuilder)
+    {
+        return new Paginator(
+            new DoctrinePaginator(new ORMPaginator($queryBuilder))
+        );
     }
 }

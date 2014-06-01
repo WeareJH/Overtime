@@ -79,6 +79,7 @@ class OvertimeController extends AbstractActionController
         $state      = $this->params()->fromRoute('state', false);
         $toDate     = $this->params()->fromRoute('to');
         $fromDate   = $this->params()->fromRoute('from');
+        $page       = (int) $this->params()->fromQuery('page', 1);
         $dateRange  = null;
 
         if ($state) {
@@ -94,9 +95,13 @@ class OvertimeController extends AbstractActionController
         $user = $this->zfcUserAuthentication()->getIdentity();
         $criteria['user'] = $user;
 
+        $overtime = $this->overtimeRepository->findByCriteriaAndDateRange($criteria, $dateRange);
+        $overtime->setCurrentPageNumber($page)
+            ->setItemCountPerPage(10);
+
         return new ViewModel([
             'user'      => $user,
-            'overtime'  => $this->overtimeRepository->findByCriteriaAndDateRange($criteria, $dateRange),
+            'overtime'  => $overtime,
         ]);
     }
 

@@ -1,0 +1,24 @@
+div#filter-nav {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.label-paid {
+    background-color: #5cb85c;
+}
+
+.label-unpaid {
+    background-color: #f0ad4e;
+}
+
+.label-declined {
+    background-color: #d9534f;;
+}
+
+#filter-params {
+    margin: 10px;
+}
+
+.filter-btn {
+    margin: 3px;
+}

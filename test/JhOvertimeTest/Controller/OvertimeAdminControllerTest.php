@@ -11,6 +11,8 @@ use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
 use JhOvertimeTest\Util\ServiceManagerFactory;
+use Zend\Paginator\Adapter\ArrayAdapter;
+use Zend\Paginator\Paginator;
 use Zend\Stdlib\Parameters;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
@@ -98,7 +100,7 @@ class OvertimeAdminControllerTest extends AbstractHttpControllerTestCase
                     new \DateTime("first day of next month 00:00:00")
                 ]
             )
-            ->will($this->returnValue([]));
+            ->will($this->returnValue($this->paginate()));
 
         $this->routeMatch->setParam('action', 'list');
         $result   = $this->controller->dispatch($this->request);
@@ -120,7 +122,7 @@ class OvertimeAdminControllerTest extends AbstractHttpControllerTestCase
                     new \DateTime("first day of next month 00:00:00")
                 ]
             )
-            ->will($this->returnValue([]));
+            ->will($this->returnValue($this->paginate()));
 
         $this->routeMatch->setParam('action', 'list');
         $this->routeMatch->setParam('state', 'whut');
@@ -145,7 +147,7 @@ class OvertimeAdminControllerTest extends AbstractHttpControllerTestCase
                     new \DateTime("first day of next month 00:00:00")
                 ]
             )
-            ->will($this->returnValue([]));
+            ->will($this->returnValue($this->paginate()));
 
         $this->routeMatch->setParam('action', 'list');
         $this->routeMatch->setParam('state', 'whut');
@@ -178,5 +180,14 @@ class OvertimeAdminControllerTest extends AbstractHttpControllerTestCase
         //then should redirect as no ID present
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals('/admin/overtime/list', $response->getHeaders()->get('location')->getFieldValue());
+    }
+
+    /**
+     * @param array $data
+     * @return Paginator
+     */
+    public function paginate(array $data = [])
+    {
+        return new Paginator(new ArrayAdapter($data));
     }
 }

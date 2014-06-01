@@ -11,6 +11,8 @@ use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\Http\TreeRouteStack as HttpRouter;
 use JhOvertimeTest\Util\ServiceManagerFactory;
+use Zend\Paginator\Adapter\ArrayAdapter;
+use Zend\Paginator\Paginator;
 use Zend\Stdlib\Parameters;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
@@ -98,7 +100,7 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
                     new \DateTime("first day of next month 00:00:00")
                 ]
             )
-            ->will($this->returnValue([]));
+            ->will($this->returnValue($this->paginate()));
 
         $this->routeMatch->setParam('action', 'list');
         $result   = $this->controller->dispatch($this->request);
@@ -121,7 +123,7 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
                     new \DateTime("first day of next month 00:00:00")
                 ]
             )
-            ->will($this->returnValue([]));
+            ->will($this->returnValue($this->paginate()));
 
         $this->routeMatch->setParam('action', 'list');
         $this->routeMatch->setParam('state', 'whut');
@@ -471,5 +473,14 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
         $defaultReturn = new \DateTime("30 May 2015");
         $ret = $this->controller->validateDate($invalidDate, $defaultReturn);
         $this->assertSame($defaultReturn, $ret);
+    }
+
+    /**
+     * @param array $data
+     * @return Paginator
+     */
+    public function paginate(array $data = [])
+    {
+        return new Paginator(new ArrayAdapter($data));
     }
 }

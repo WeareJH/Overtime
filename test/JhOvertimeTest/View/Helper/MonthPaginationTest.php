@@ -36,13 +36,13 @@ class MonthPaginationTest extends \PHPUnit_Framework_TestCase
     {
         $route = 'test';
 
-        $thisMonth = new \DateTime('first day of this month');
-        $prevMonth = new \DateTime("first day of previous month");
+        $from = new \DateTime('first day of previous month');
+        $to = new \DateTime("last day of previous month");
 
         $this->renderer
             ->expects($this->once())
             ->method('url')
-            ->with($route, ['to' => $thisMonth->format('d-m-Y'), 'from' => $prevMonth->format('d-m-Y')], true);
+            ->with($route, ['from' => $from->format('d-m-Y'), 'to' => $to->format('d-m-Y')], true);
 
         $this->helper->__invoke($route)->prevMonth();
     }
@@ -57,7 +57,7 @@ class MonthPaginationTest extends \PHPUnit_Framework_TestCase
         $this->renderer
             ->expects($this->once())
             ->method('url')
-            ->with($route, ['to' => '01-04-2014', 'from' => '01-03-2014'], true);
+            ->with($route, ['from' => '01-03-2014', 'to' => '31-03-2014', ], true);
 
         $this->helper->__invoke($route)->prevMonth();
     }
@@ -67,13 +67,12 @@ class MonthPaginationTest extends \PHPUnit_Framework_TestCase
         $route = 'test';
 
         $from   = new \DateTime('first day of next month');
-        $to     = clone $from;
-        $to->modify("+1 month");
+        $to     = new \DateTime('last day of next month');
 
         $this->renderer
             ->expects($this->once())
             ->method('url')
-            ->with($route, ['to' => $to->format('d-m-Y'), 'from' => $from->format('d-m-Y')], true);
+            ->with($route, ['from' => $from->format('d-m-Y'), 'to' => $to->format('d-m-Y'), ], true);
 
         $this->helper->__invoke($route)->nextMonth();
     }
@@ -88,7 +87,7 @@ class MonthPaginationTest extends \PHPUnit_Framework_TestCase
         $this->renderer
             ->expects($this->once())
             ->method('url')
-            ->with($route, ['to' => '12-05-2014', 'from' => '12-04-2014'], true);
+            ->with($route, ['from' => '01-05-2014', 'to' => '31-05-2014'], true);
 
         $this->helper->__invoke($route)->nextMonth();
     }

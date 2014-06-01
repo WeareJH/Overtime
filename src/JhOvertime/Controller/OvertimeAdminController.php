@@ -44,6 +44,7 @@ class OvertimeAdminController extends OvertimeController
         $userId     = $this->params()->fromRoute('user', false);
         $toDate     = $this->params()->fromRoute('to');
         $fromDate   = $this->params()->fromRoute('from');
+        $page       = (int) $this->params()->fromQuery('page', 1);
         $dateRange  = null;
 
         if ($state) {
@@ -60,8 +61,12 @@ class OvertimeAdminController extends OvertimeController
             $dateRange = [ $from, $to];
         }
 
+        $overtime = $this->overtimeRepository->findByCriteriaAndDateRange($criteria, $dateRange);
+        $overtime->setCurrentPageNumber($page)
+            ->setItemCountPerPage(10);
+
         return new ViewModel([
-            'overtime'  => $this->overtimeRepository->findByCriteriaAndDateRange($criteria, $dateRange),
+            'overtime'  => $overtime,
         ]);
     }
 }

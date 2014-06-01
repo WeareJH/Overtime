@@ -43,6 +43,7 @@ class OvertimeFieldset extends Fieldset implements InputFilterProviderInterface
             ],
             'attributes' => [
                 'class' => 'form-control input-sm',
+                'value' => date('Y-m-d'),
             ],
         ]);
 

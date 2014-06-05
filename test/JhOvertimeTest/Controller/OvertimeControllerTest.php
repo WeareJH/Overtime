@@ -213,6 +213,19 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
+        $fieldset = $this->getMock('Zend\Form\FieldsetInterface');
+        $fieldset
+            ->expects($this->once())
+            ->method('has')
+            ->with('user')
+            ->will($this->returnValue(false));
+
+        $this->form
+            ->expects($this->once())
+            ->method('get')
+            ->with('overtime')
+            ->will($this->returnValue($fieldset));
+
         $result   = $this->controller->dispatch($this->request);
         $response = $this->controller->getResponse();
 
@@ -252,6 +265,19 @@ class OvertimeControllerTest extends AbstractHttpControllerTestCase
             ->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
+
+        $fieldset = $this->getMock('Zend\Form\FieldsetInterface');
+        $fieldset
+            ->expects($this->once())
+            ->method('has')
+            ->with('user')
+            ->will($this->returnValue(false));
+
+        $this->form
+            ->expects($this->once())
+            ->method('get')
+            ->with('overtime')
+            ->will($this->returnValue($fieldset));
 
         $result   = $this->controller->dispatch($this->request);
         $response = $this->controller->getResponse();

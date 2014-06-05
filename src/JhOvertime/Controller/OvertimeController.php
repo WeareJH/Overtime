@@ -120,7 +120,13 @@ class OvertimeController extends AbstractActionController
 
             if ($this->overtimeForm->isValid()) {
                 try {
-                    $overtime->setUser($user);
+
+                    //only set use if this form form does not have the user
+                    //field
+                    if (!$this->overtimeForm->get('overtime')->has('user')) {
+                        $overtime->setUser($user);
+                    }
+
                     $this->overtimeService->save($overtime);
                     //add messages
                     return $this->redirect()->toRoute($this->listRoute);

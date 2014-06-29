@@ -177,21 +177,27 @@ return [
         ],
     ],
 
-    'navigation' => [
-        'default' => [
-            [
-                'name'      => 'Overtime',
-                'label'     => 'Overtime',
-                'route'     => 'overtime/list',
-                'resource'  => 'user-nav',
-                'privilege' => 'view',
+    'spiffy_navigation' => [
+        'containers' => [
+            'default' => [
+                [
+                    'options' => [
+                        'name'          => 'Overtime',
+                        'label'         => 'Overtime',
+                        'route'         => 'overtime/list',
+                        'role'          => 'user',
+                        'permission'    => 'user-nav.view'
+                    ],
+                ],
             ],
-        ],
-
-        'admin' => [
-            'overtime' => [
-                'label' => 'Overtime',
-                'route' => 'zfcadmin/overtime/list',
+            'admin' => [
+                [
+                    'options' => [
+                        'name'          => 'Overtime Admin',
+                        'label'         => 'Overtime',
+                        'route'         => 'zfcadmin/overtime/list',
+                    ],
+                ]
             ],
         ],
     ],

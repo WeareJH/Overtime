@@ -1,7 +1,7 @@
 <?php $title = 'Edit overtime';
 $this->headTitle($title); ?>
 
-<h1><?php echo $this->escapeHtml(sprintf('Edit overtime entry for %s', $this->user->getDisplayName())); ?></h1>
+<h1><?php echo $this->escapeHtml(sprintf('Edit overtime entry for %s', $this->overtime->getUser()->getDisplayName())); ?></h1>
 <br />
 <div class="row">
     <div class="col-sm-8">

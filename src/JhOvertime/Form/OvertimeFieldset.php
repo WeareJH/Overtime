@@ -26,7 +26,6 @@ class OvertimeFieldset extends Fieldset implements InputFilterProviderInterface
         $this->setHydrator($hydrator)
             ->setObject(new Overtime());
 
-
         $this->add([
             'name'  => 'id',
             'type'  => 'hidden'

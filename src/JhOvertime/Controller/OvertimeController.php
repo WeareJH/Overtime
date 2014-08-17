@@ -11,6 +11,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Form\FormInterface;
 use Zend\Validator\Date as DateValidator;
 use ZfcDatagrid\Column;
+use ZfcRbac\Exception\UnauthorizedException;
 
 /**
  * Class OvertimeController
@@ -77,6 +78,7 @@ class OvertimeController extends AbstractActionController
     {
         $criteria   = [];
         $state      = $this->params()->fromRoute('state', false);
+        $userId     = $this->params()->fromRoute('user', false);
         $toDate     = $this->params()->fromRoute('to');
         $fromDate   = $this->params()->fromRoute('from');
         $page       = (int) $this->params()->fromQuery('page', 1);
@@ -86,21 +88,31 @@ class OvertimeController extends AbstractActionController
             $criteria['state'] = $state;
         }
 
+        //if there is a User ID present and current user
+        //is allowed to view others records
+        //add it to criteria
+        if ($userId && $this->isGranted('overtime.readOthers')) {
+            $criteria['user'] = $userId;
+
+        //if no User ID present and current user
+        //is not allowed to view others records
+        //restrict records to current user
+        } elseif (!$this->isGranted('overtime.readOthers')) {
+            $user = $this->zfcUserAuthentication()->getIdentity();
+            $criteria['user'] = $user;
+        }
+
         if (!$this->params()->fromRoute('all', false)) {
             $from   = $this->validateDate($fromDate, new \DateTime("first day of this month 00:00:00"));
             $to     = $this->validateDate($toDate, new \DateTime("first day of next month 00:00:00"));
             $dateRange = [ $from, $to];
         }
 
-        $user = $this->zfcUserAuthentication()->getIdentity();
-        $criteria['user'] = $user;
-
         $overtime = $this->overtimeRepository->findByCriteriaAndDateRange($criteria, $dateRange);
         $overtime->setCurrentPageNumber($page)
             ->setItemCountPerPage(10);
 
         return new ViewModel([
-            'user'      => $user,
             'overtime'  => $overtime,
         ]);
     }
@@ -112,6 +124,10 @@ class OvertimeController extends AbstractActionController
     {
         $request    = $this->getRequest();
         $user       = $this->zfcUserAuthentication()->getIdentity();
+
+        if (!$this->isGranted('overtime.create')) {
+            throw new UnauthorizedException("Not Allowed!");
+        }
 
         if ($request->isPost()) {
             $overtime   = new Overtime();
@@ -147,22 +163,32 @@ class OvertimeController extends AbstractActionController
      */
     public function editAction()
     {
+        //ignore user element - as this can't be changed here
+        $this->overtimeForm->setValidationGroup([
+            'overtime' => [
+                'state',
+                'date',
+                'duration',
+                'notes',
+            ],
+        ]);
+
         $request    = $this->getRequest();
         $id         = $this->params()->fromRoute('id');
-        $user       = $this->zfcUserAuthentication()->getIdentity();
 
         if (!$id) {
             return $this->redirect()->toRoute($this->listRoute);
         }
 
         try {
-            $overtime = $this->overtimeRepository->findOneByUserAndId(
-                $this->zfcUserAuthentication()->getIdentity(),
-                $id
-            );
+            $overtime = $this->overtimeRepository->find($id);
         } catch (\Exception $e) {
             //add error message
             return $this->redirect()->toRoute($this->listRoute);
+        }
+
+        if (!$this->isGranted('overtime.edit', $overtime)) {
+            throw new UnauthorizedException("Not Allowed!");
         }
 
         $this->overtimeForm->bind($overtime);
@@ -180,7 +206,6 @@ class OvertimeController extends AbstractActionController
         }
 
         return new ViewModel([
-            'user'      => $user,
             'overtime'  => $overtime,
             'form'      => $this->overtimeForm,
         ]);
@@ -198,15 +223,15 @@ class OvertimeController extends AbstractActionController
         }
 
         try {
-            $overtime = $this->overtimeRepository->findOneByUserAndId(
-                $this->zfcUserAuthentication()->getIdentity(),
-                $id
-            );
+            $overtime = $this->overtimeRepository->find($id);
         } catch (\Exception $e) {
             //add error message
             return $this->redirect()->toRoute($this->listRoute);
         }
 
+        if (!$this->isGranted('overtime.delete', $overtime)) {
+            throw new UnauthorizedException("Not Allowed!");
+        }
 
         $this->overtimeService->delete($overtime);
         return $this->redirect()->toRoute($this->listRoute);
